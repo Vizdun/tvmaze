@@ -91,14 +91,8 @@ pub async fn show_images(show: usize) -> Result<Option<Vec<ShowImage>>, reqwest:
 }
 
 /// A list of all shows in our database, with all primary information included. You can use this endpoint for example if you want to build a local cache of all shows contained in the TVmaze database. This endpoint is paginated, with a maximum of 250 results per page. The pagination is based on show ID, e.g. page 0 will contain shows with IDs between 0 and 250. This means a single page might contain less than 250 results, in case of deletions, but it also guarantees that deletions won't cause shuffling in the page numbering for other shows.
-pub async fn show_index(page: usize) -> Result<Vec<Show>, reqwest::Error> {
-    Ok(serde_json::from_str(
-        &reqwest::get(format!("https://api.tvmaze.com/shows?page={}", page,))
-            .await?
-            .text()
-            .await?,
-    )
-    .unwrap())
+pub async fn show_index(page: usize) -> Result<Option<Vec<Show>>, reqwest::Error> {
+    crate::notfoundable_endpoint!(format!("https://api.tvmaze.com/shows?page={}", page,))
 }
 
 #[cfg(test)]
@@ -197,7 +191,7 @@ mod tests {
 
     #[tokio::test]
     async fn test_show_index() {
-        let res = &show_index(0).await.unwrap()[0];
+        let res = &show_index(0).await.unwrap().unwrap()[0];
         assert!(res.id <= 250);
     }
 }
