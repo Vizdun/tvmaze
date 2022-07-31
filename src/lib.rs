@@ -1,6 +1,6 @@
 use std::fmt::Display;
 
-mod models;
+pub mod models;
 
 mod search;
 pub use search::*;
