@@ -27,6 +27,7 @@ macro_rules! notfoundable_endpoint {
 
 pub(crate) use notfoundable_endpoint;
 
+#[derive(Default)]
 pub struct Embed {
     pub episodes: bool,
     pub cast: bool,
